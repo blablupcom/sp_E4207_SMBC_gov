@@ -102,17 +102,25 @@ soup = BeautifulSoup(html, 'lxml')
 
 block = soup.find('div', 'double-margin-bottom body-text')
 links = block.find_all('a', href=True)
+link_lists = []
 for link in links:
     csvfile = link.text
     if 'Expenditure' in csvfile:
-        csvfile = link.text
+        csvfile = link.text.strip()
         csvMth = ''
         csvYr = ''
-        if 'Excel' in csvfile:
+        if 'CSV' in csvfile:
+            link_lists.append(csvfile.split('Expenditure')[0].strip().replace(u'\xa0', ' '))
             url = link['href']
             csvMth = csvfile[:3]
             csvYr = csvfile.replace(u'\xa0', ' ').split(' ')[1].strip()
-        elif 'feb15' in link['href'] or 'dec14' in link['href'] or 'november_2014' in link['href']:
+        else:
+            if csvfile.split('Expenditure')[0].strip().replace(u'\xa0', ' ') in link_lists:
+                continue
+            url = link['href']
+            csvMth = csvfile[:3]
+            csvYr = csvfile.replace(u'\xa0', ' ').split(' ')[1].strip()
+        if 'feb15' in link['href'] or 'dec14' in link['href'] or 'november_2014' in link['href']:
             url = link['href']
             csvMth = csvfile[:3]
             csvYr = csvfile.replace(u'\xa0', ' ').split(' ')[1].strip()
