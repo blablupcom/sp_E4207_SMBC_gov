@@ -124,6 +124,8 @@ for k, v in dic.iteritems():
     if len(csvMth) == 1:
         csvMth = '0' + csvMth
     csvYr = k.split('/')[2]
+    if '31/3/2016' in k:
+        csvMth = 'Q1'
     url = v
     csvMth = convert_mth_strings(csvMth.upper())
     data.append([csvYr, csvMth, url])
